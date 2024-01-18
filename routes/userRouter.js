@@ -12,7 +12,7 @@ const userSchema = require("../models/userSchema");
 
 /**
  * @swagger
- * /api/getAll:
+ * /api/users/getAll:
  *   get:
  *     summary: Get all users
  *     tags: [Users]
@@ -91,7 +91,7 @@ router.get("/getAll", async (req, res) => {
 
 /**
  * @swagger
- * /api/getOne/{email}:
+ * /api/users/getOne/{email}:
  *   get:
  *     summary: Get a user by email
  *     tags: [Users]
@@ -114,6 +114,9 @@ router.get("/getAll", async (req, res) => {
  */
 router.get("/getOne/:email", async (req, res) => {
   const { email } = req.params;
+  console.log(email);
+
+  
 
   try {
     const data = await userSchema.find({ email });
@@ -132,7 +135,7 @@ router.get("/getOne/:email", async (req, res) => {
 
 /**
  * @swagger
- * /api/new:
+ * /api/users/new:
  *   post:
  *     summary: Create a new user
  *     tags: [Users]
@@ -189,7 +192,7 @@ router.post("/new", async (req, res) => {
 
 /**
  * @swagger
- * /api/update:
+ * /api/users/update:
  *   patch:
  *     summary: Update a user by email
  *     tags: [Users]
