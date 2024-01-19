@@ -4,19 +4,18 @@ const rommSchema = require("../models/roomSchema");
 
 router.get("/getAllUnique", async (req, res) => {
   try {
-    //const data = await rommSchema.find();
     const uniqueRooms = await rommSchema.aggregate([
-      {
-        $sort: { price_per_night: 1 }, // Sort by price_per_night in ascending order
-      },
       {
         $group: {
           _id: "$type",
-          firstRoom: { $first: "$$ROOT" },
+          firstRoom: { $first: "$$ROOT" }, // Tomar el primer documento de cada grupo
         },
       },
       {
-        $replaceRoot: { newRoot: "$firstRoom" },
+        $replaceRoot: { newRoot: "$firstRoom" }, // Reemplazar la raíz con el primer documento de cada grupo
+      },
+      {
+        $sort: { price_per_night: 1 }, // Volver a ordenar por price_per_night (opcional)
       },
     ]);
     console.log(uniqueRooms);

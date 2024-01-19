@@ -22,7 +22,8 @@ app.use("/", (req, res) => {
   <p>http://localhost:${PORT}/api/users/getAll</p>
   <p>http://localhost:${PORT}/api/users/getOne/{email}</p>
   <p>http://localhost:${PORT}/api/users/new</p>
-  <p>http://localhost:${PORT}/api/users/update</p>`);
+  <p>http://localhost:${PORT}/api/users/update</p>
+  <p>http://localhost:${PORT}/api/rooms/getAllUnique</p>`);
 });
 /*--------------------------------------------------------------*/
 app.listen(PORT, () => {
