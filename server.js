@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/users", userRouter);
 app.use("/api/rooms", roomRouter);
-/*------------------------------SWAGGER--------------------------*/
+
 
 app.use("/", (req, res) => {
   res.status(200).send(`<h1>Hotel Pere María Api</h1><br> 
@@ -23,9 +23,11 @@ app.use("/", (req, res) => {
   <p>http://localhost:${PORT}/api/users/getOne/{email}</p>
   <p>http://localhost:${PORT}/api/users/new</p>
   <p>http://localhost:${PORT}/api/users/update</p>
-  <p>http://localhost:${PORT}/api/rooms/getAllUnique</p>`);
+  <p>http://localhost:${PORT}/api/rooms/getAllUnique</p>
+  <p>http://localhost:${PORT}/api/rooms/getOneRoom/{type}</p>`);
 });
 /*--------------------------------------------------------------*/
 app.listen(PORT, () => {
   console.log(`Server started at http://localhost:${PORT}`);
 });
+ 

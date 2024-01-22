@@ -15,11 +15,24 @@ router.get("/getAllUnique", async (req, res) => {
         $replaceRoot: { newRoot: "$firstRoom" }, // Reemplazar la raíz con el primer documento de cada grupo
       },
       {
-        $sort: { price_per_night: 1 }, // Volver a ordenar por price_per_night (opcional)
+        $sort: { price_per_night: 1 }, // Ordenar por price_per_night
       },
     ]);
-    console.log(uniqueRooms);
+
     res.status(200).json(uniqueRooms);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/getOneRoom/:type", async (req, res) => {
+  
+  const { type } = req.params;
+
+  try {
+    const room = await rommSchema.findOne({ type });
+    console.log(room);
+    res.status(200).json(room);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
