@@ -3,7 +3,7 @@ const router = express.Router();
 const userSchema = require("../models/userSchema");
 
 
-router.get("/getAll", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const data = await userSchema.find();
     res.status(200).json(data);
@@ -12,7 +12,7 @@ router.get("/getAll", async (req, res) => {
   }
 });
 
-router.get("/getOne/:email", async (req, res) => {
+router.get("/:email", async (req, res) => {
   const { email } = req.params;
   console.log(email);
 

@@ -22,8 +22,8 @@ app.use("/api/rooms", roomRouter);
 
 app.use("/", (req, res) => {
   res.status(200).send(`<h1>Hotel Pere María Api</h1><br> 
-  <p>http://localhost/api/users/getAll</p>
-  <p>http://localhost/api/users/getOne/{email}</p>
+  <p>http://localhost/api/users</p>
+  <p>http://localhost/api/users/{email}</p>
   <p>http://localhost/api/users/new</p>
   <p>http://localhost/api/users/update</p>
   <p>http://localhost/api/rooms/unique-rooms</p>
