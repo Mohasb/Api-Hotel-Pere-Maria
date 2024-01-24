@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const rommSchema = require("../models/roomSchema");
 
-router.get("/getAllUnique", async (req, res) => {
+router.get("/unique-rooms", async (req, res) => {
   try {
     const uniqueRooms = await rommSchema.aggregate([
       {
@@ -25,7 +25,7 @@ router.get("/getAllUnique", async (req, res) => {
   }
 });
 
-router.get("/getOneRoom/:type", async (req, res) => {
+router.get("/:type", async (req, res) => {
   
   const { type } = req.params;
 

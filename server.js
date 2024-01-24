@@ -26,8 +26,8 @@ app.use("/", (req, res) => {
   <p>http://localhost/api/users/getOne/{email}</p>
   <p>http://localhost/api/users/new</p>
   <p>http://localhost/api/users/update</p>
-  <p>http://localhost/api/rooms/getAllUnique</p>
-  <p>http://localhost/api/rooms/getOneRoom/{type}</p>`);
+  <p>http://localhost/api/rooms/unique-rooms</p>
+  <p>http://localhost/api/rooms/{type}</p>`);
 });
 /*--------------------------------------------------------------*/
 
