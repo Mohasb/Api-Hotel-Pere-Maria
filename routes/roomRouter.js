@@ -2,6 +2,16 @@ const express = require("express");
 const router = express.Router();
 const rommSchema = require("../models/roomSchema");
 
+router.get("/", async (req, res) => {
+  try {
+    const rooms = await rommSchema.find()
+
+    res.status(200).json(rooms);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.get("/unique-rooms", async (req, res) => {
   try {
     const uniqueRooms = await rommSchema.aggregate([

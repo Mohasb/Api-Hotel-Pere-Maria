@@ -1,33 +1,31 @@
 "use strict";
 
+// Para usar express
 const express = require("express");
+// Para usar json
 const bodyParser = require("body-parser");
-const path = require("path");
+// Para usar https
 const fs = require("fs");
 const https = require("https");
+// Para usar variables de entorno
 require("dotenv").config();
+require("./connection");
 
+const path = require('path');
 const PORT = 443;
 const app = express();
-require("./connection");
 const userRouter = require("./routes/userRouter");
 const roomRouter = require("./routes/roomRouter");
 const redirectToHTTPS = require("./security/securityMW");
 /*------------------------------MIDDLEWARES--------------------------*/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(redirectToHTTPS);
+app.use(redirectToHTTPS); 
 app.use("/api/users", userRouter);
 app.use("/api/rooms", roomRouter);
 
 app.use("/", (req, res) => {
-  res.status(200).send(`<h1>Hotel Pere María Api</h1><br> 
-  <p>http://localhost/api/users</p>
-  <p>http://localhost/api/users/{email}</p>
-  <p>http://localhost/api/users/new</p>
-  <p>http://localhost/api/users/update</p>
-  <p>http://localhost/api/rooms/unique-rooms</p>
-  <p>http://localhost/api/rooms/{type}</p>`);
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 /*--------------------------------------------------------------*/
 
