@@ -31,7 +31,6 @@ router.get("/getOneRoom/:type", async (req, res) => {
 
   try {
     const room = await rommSchema.findOne({ type });
-    console.log(room);
     res.status(200).json(room);
   } catch (error) {
     res.status(500).json({ message: error.message });
