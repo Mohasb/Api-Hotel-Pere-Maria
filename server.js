@@ -22,12 +22,12 @@ app.use("/api/rooms", roomRouter);
 
 app.use("/", (req, res) => {
   res.status(200).send(`<h1>Hotel Pere María Api</h1><br> 
-  <p>http://localhost:${PORT}/api/users/getAll</p>
-  <p>http://localhost:${PORT}/api/users/getOne/{email}</p>
-  <p>http://localhost:${PORT}/api/users/new</p>
-  <p>http://localhost:${PORT}/api/users/update</p>
-  <p>http://localhost:${PORT}/api/rooms/getAllUnique</p>
-  <p>http://localhost:${PORT}/api/rooms/getOneRoom/{type}</p>`);
+  <p>http://localhost/api/users/getAll</p>
+  <p>http://localhost/api/users/getOne/{email}</p>
+  <p>http://localhost/api/users/new</p>
+  <p>http://localhost/api/users/update</p>
+  <p>http://localhost/api/rooms/getAllUnique</p>
+  <p>http://localhost/api/rooms/getOneRoom/{type}</p>`);
 });
 /*--------------------------------------------------------------*/
 
