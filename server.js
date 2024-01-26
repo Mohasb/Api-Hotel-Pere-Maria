@@ -11,21 +11,25 @@ const https = require("https");
 require("dotenv").config();
 require("./connection");
 
-const path = require('path');
+const path = require("path");
 const PORT = 443;
 const app = express();
 const userRouter = require("./routes/userRouter");
 const roomRouter = require("./routes/roomRouter");
 const redirectToHTTPS = require("./security/securityMW");
+const verifyToken = require("./Auth/AuthJwtMW");
 /*------------------------------MIDDLEWARES--------------------------*/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(redirectToHTTPS); 
+app.use(redirectToHTTPS);
+
+//Auth
+
 app.use("/api/users", userRouter);
 app.use("/api/rooms", roomRouter);
 
 app.use("/", (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 /*--------------------------------------------------------------*/
 

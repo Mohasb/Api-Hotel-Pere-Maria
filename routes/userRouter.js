@@ -1,9 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const userSchema = require("../models/userSchema");
+const loginUser = require("./loginRouter");
+const verifyToken = require("../Auth/AuthJwtMW");
+const authorize = require("../Auth/AutorizationMW");
 
 
-router.get("/", async (req, res) => {
+router.post("/login", loginUser, (req, res) => {
+  // Si llegamos aquí, el token se ha verificado correctamente
+  res.json({
+    error: null,
+    data: { token: req.token },
+  });
+  console.log(req.token);
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+router.get("/", verifyToken, authorize("admin"), async (req, res) => {
   try {
     const data = await userSchema.find();
     res.status(200).json(data);
@@ -15,8 +29,6 @@ router.get("/", async (req, res) => {
 router.get("/:email", async (req, res) => {
   const { email } = req.params;
   console.log(email);
-
-  
 
   try {
     const data = await userSchema.find({ email });
@@ -33,7 +45,7 @@ router.get("/:email", async (req, res) => {
   }
 });
 
-router.post("/new", async (req, res) => {
+router.post("/", async (req, res) => {
   const data = new userSchema({
     user_name: req.body.user_name,
     email: req.body.email,
