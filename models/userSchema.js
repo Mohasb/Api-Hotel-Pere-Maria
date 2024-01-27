@@ -39,8 +39,12 @@ const userSchema = new mongoose.Schema({
     required: true,
     min: 6,
     max: 255,
+    default: 'user',
   },
-  reservations: [reservationSchema],
+  reservations: {
+    type: [reservationSchema],
+    default: [],
+  },
 });
 
 const UserModel = mongoose.model("user", userSchema);
