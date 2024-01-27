@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-
+const schemaLogin = require("../validations/loginSchema")
 const userSchema = require("../models/userSchema");
 
 const loginUser = async (req, res, next) => {
@@ -9,8 +9,8 @@ const loginUser = async (req, res, next) => {
   try {
 
     const { error } = schemaLogin.validate(req.body);
+    console.log(error); 
     if (error) return res.status(400).json({ error: error.details[0].message })
-
     
     // Verificar si el usuario existe en la base de datos
     const user = await userSchema.findOne({ email });
@@ -21,8 +21,8 @@ const loginUser = async (req, res, next) => {
 
     // Verificar la contraseña utilizando bcrypt
     const isPasswordValid = await bcrypt.compare(
-      password.trim(),
-      user.password.trim()
+      password,
+      user.password
     );
 
     if (!isPasswordValid) {
@@ -37,13 +37,14 @@ const loginUser = async (req, res, next) => {
     };
 
     const options = {
-      expiresIn: "1h", // El token expirará en 1 hora
+      expiresIn: "8h", // El token expirará en 8 horas
     };
 
     const token = jwt.sign(payload, secretKey, options);
     req.token = token;
     next();
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Error durante el inicio de sesión" });
   }
 };

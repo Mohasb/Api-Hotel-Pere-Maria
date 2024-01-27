@@ -4,14 +4,13 @@ const userSchema = require("../models/userSchema");
 const loginUser = require("./loginRouter");
 const verifyToken = require("../Auth/AuthJwtMW");
 const authorize = require("../Auth/AutorizationMW");
-const schemaRegister = require("../validations/ValidationSchemas");
+const schemaRegister = require("../validations/registerSchema");
 const { rojo, verde, reset, print } = require("./../helpers/colors");
 
 // Login usuario
 router.post("/login", loginUser, (req, res) => {
   // Si llegamos aquí, el token se ha verificado correctamente
   res.json({
-    error: null,
     token: req.token,
   });
   print(verde + "Usuario conectado correctamente.\nToken:");
