@@ -1,17 +1,20 @@
+const express = require("express");
+
+const router = express.Router();
+
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const schemaLogin = require("../validations/loginSchema")
-const userSchema = require("../models/userSchema");
+const schemaLogin = require("../../validations/loginSchema");
+const userSchema = require("../../models/userSchema");
 
-const loginUser = async (req, res, next) => {
+const loginUserController = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-
     const { error } = schemaLogin.validate(req.body);
-    console.log(error); 
-    if (error) return res.status(400).json({ error: error.details[0].message })
-    
+    console.log(error);
+    if (error) return res.status(400).json({ error: error.details[0].message });
+
     // Verificar si el usuario existe en la base de datos
     const user = await userSchema.findOne({ email });
 
@@ -20,10 +23,7 @@ const loginUser = async (req, res, next) => {
     }
 
     // Verificar la contraseña utilizando bcrypt
-    const isPasswordValid = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
       return res.status(401).json({ error: "Contraseña incorrecta" });
@@ -49,4 +49,4 @@ const loginUser = async (req, res, next) => {
   }
 };
 
-module.exports = loginUser;
+module.exports = loginUserController

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const rommSchema = require("../models/roomSchema");
+const rommSchema = require("../../models/roomSchema");
 
 router.get("/", async (req, res) => {
   try {
@@ -45,6 +45,5 @@ router.get("/:type", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 module.exports = router;

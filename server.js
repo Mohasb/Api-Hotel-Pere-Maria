@@ -14,10 +14,13 @@ require("./connection");
 const path = require("path");
 const PORT = 443;
 const app = express();
-const userRouter = require("./routes/userRouter");
-const roomRouter = require("./routes/roomRouter");
+const userRouter = require("./routes/users/userRouter");
+const roomRouter = require("./routes/rooms/roomRouter");
 const redirectToHTTPS = require("./security/securityMW");
+
+const { swaggerSpec, swaggerUi } = require("./swagger");
 /*------------------------------MIDDLEWARES--------------------------*/
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(redirectToHTTPS);
@@ -25,9 +28,9 @@ app.use(redirectToHTTPS);
 app.use("/api/users", userRouter);
 app.use("/api/rooms", roomRouter);
 
-app.use("/", (req, res) => {
+/*app.use("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+});*/
 /*--------------------------------------------------------------*/
 
 // Cargar los archivos del certificado y la clave privada https
@@ -41,6 +44,6 @@ const httpsServer = https.createServer(credentials, app);
 // Iniciar el servidor HTTPS
 httpsServer.listen(PORT, () => {
   console.log(
-    `Servidor HTTPS está escuchando en la ruta: https://localhost:${PORT}`
+    `Servidor HTTPS está escuchando en la ruta: https://localhost:${PORT}/api-docs`
   );
 });

@@ -1,21 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const userSchema = require("../models/userSchema");
-const loginUser = require("./loginRouter");
-const verifyToken = require("../Auth/AuthJwtMW");
-const authorize = require("../Auth/AutorizationMW");
-const schemaRegister = require("../validations/registerSchema");
-const { rojo, verde, reset, print } = require("./../helpers/colors");
+const userSchema = require("../../models/userSchema");
+const loginUser = require("../login/loginRouter");
+const verifyToken = require("../../Auth/AuthJwtMW");
+const authorize = require("../../Auth/AutorizationMW");
+const schemaRegister = require("../../validations/registerSchema");
 
-// Login usuario
-router.post("/login", loginUser, (req, res) => {
-  // Si llegamos aquí, el token se ha verificado correctamente
-  res.json({
-    token: req.token,
-  });
-  print(verde + "Usuario conectado correctamente.\nToken:");
-  print(req.token);
-});
+
+router.use("/login", loginUser);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // Obtener todos los usuarios

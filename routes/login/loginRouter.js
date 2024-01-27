@@ -1,0 +1,64 @@
+const express = require("express");
+const router = express.Router();
+const loginUserController = require("./loginController");
+const { rojo, verde, reset, print } = require("../../helpers/colors");
+
+// Login usuario
+/**
+ * @swagger
+ * /api/users/login:
+ *   post:
+ *     summary: Iniciar sesión de usuario
+ *     description: Inicia sesión de un usuario y devuelve un token de acceso.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 default: "chitan@gmail.com"
+ *               password:
+ *                 type: string
+ *                 default: "Chitan2024!"
+ *             required:
+ *               - email
+ *               - password
+ *     responses:
+ *       '200':
+ *         description: Token de acceso generado correctamente.
+ *         content:
+ *           application/json:
+ *             example:
+ *               token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *       '400':
+ *         description: Datos de inicio de sesión inválidos.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Datos de inicio de sesión inválidos."
+ *       '401':
+ *         description: Usuario no encontrado o contraseña incorrecta.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Usuario no encontrado o contraseña incorrecta."
+ *       '500':
+ *         description: Error durante el inicio de sesión.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Error durante el inicio de sesión."
+ */
+router.post("/", loginUserController, (req, res) => {
+  // Si llegamos aquí, el token se ha verificado correctamente
+  res.json({
+    token: req.token,
+  });
+  print(verde + "Usuario conectado correctamente.\nToken:");
+  print(req.token);
+});
+
+module.exports = router;
