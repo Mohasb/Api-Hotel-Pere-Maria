@@ -115,7 +115,7 @@ router.get("/unique-rooms", async (req, res) => {
     ]);
 
     const uniqueRoomsWithImageURLs = uniqueRooms.map((room) => {
-      console.log("Original room:", room);
+      //console.log("Original room:", room);
 
       const roomCopy = {
         ...room,
@@ -128,7 +128,7 @@ router.get("/unique-rooms", async (req, res) => {
       return roomCopy;
     });
 
-    console.dir(uniqueRoomsWithImageURLs, { depth: null });
+    //console.dir(uniqueRoomsWithImageURLs, { depth: null });
 
     res.status(200).json(uniqueRoomsWithImageURLs);
   } catch (error) {
@@ -149,6 +149,7 @@ router.get("/unique-rooms", async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
+ *           default: "Individual"
  *         description: Tipo de la habitación a buscar
  *     responses:
  *       200:
@@ -165,10 +166,24 @@ router.get("/:type", async (req, res) => {
 
   try {
     const room = await rommSchema.findOne({ type });
-    res.status(200).json(room);
+
+    if (!room) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+
+    const roomWithImageURLs = {
+      ...room._doc,
+      images: room.images.map((image) => ({
+        ...image._doc,
+        url: `${baseURL}${image.image}.jpg`,
+      })),
+    };
+
+    res.status(200).json(roomWithImageURLs);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 module.exports = router;
