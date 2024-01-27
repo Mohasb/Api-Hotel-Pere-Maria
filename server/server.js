@@ -18,13 +18,14 @@ const userRouter = require("./routes/users/userRouter");
 const roomRouter = require("./routes/rooms/roomRouter");
 const redirectToHTTPS = require("./security/securityMW");
 const { swaggerSpec, swaggerUi } = require("./helpers/swagger");
-const authorize = require("./routes/middlewares/auth/AutorizationMW");
+const { rojo, verde, print } = require("./helpers/colors");
+
 /*------------------------------MIDDLEWARES--------------------------*/
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(redirectToHTTPS);
-app.use('/api/assets', express.static('server/assets'));
+app.use("/api/assets", express.static("server/assets"));
 app.use("/api/users", userRouter);
 app.use("/api/rooms", roomRouter);
 
@@ -40,7 +41,9 @@ const httpsServer = https.createServer(credentials, app);
 
 // Iniciar el servidor HTTPS
 httpsServer.listen(PORT, () => {
-  console.log(
-    `Servidor HTTPS está escuchando en la ruta: https://localhost:${PORT}/api-docs`
+  print(
+    "Servidor HTTPS está escuchando en la ruta: " +
+      verde +
+      `https://localhost:${PORT}/api-docs`
   );
 });

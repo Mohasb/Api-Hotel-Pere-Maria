@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const rommSchema = require("../../models/roomSchema");
+require("dotenv");
 
-const baseURL = "https://localhost/api/assets/roomImages/";
+const baseURL = process.env.BASE_URL_IMAGES || "";
 
 /**
  * @swagger
@@ -184,6 +185,5 @@ router.get("/:type", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 module.exports = router;
