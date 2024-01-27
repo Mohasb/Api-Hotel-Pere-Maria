@@ -17,13 +17,10 @@ const app = express();
 const userRouter = require("./routes/userRouter");
 const roomRouter = require("./routes/roomRouter");
 const redirectToHTTPS = require("./security/securityMW");
-const verifyToken = require("./Auth/AuthJwtMW");
 /*------------------------------MIDDLEWARES--------------------------*/
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(redirectToHTTPS);
-
-//Auth
 
 app.use("/api/users", userRouter);
 app.use("/api/rooms", roomRouter);
@@ -33,7 +30,7 @@ app.use("/", (req, res) => {
 });
 /*--------------------------------------------------------------*/
 
-// Cargar los archivos del certificado y la clave privada
+// Cargar los archivos del certificado y la clave privada https
 const privateKey = fs.readFileSync("./security/host.key", "utf8");
 const certificate = fs.readFileSync("./security/host.crt", "utf8");
 const credentials = { key: privateKey, cert: certificate };

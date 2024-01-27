@@ -47,4 +47,10 @@ router.get("/:type", async (req, res) => {
   }
 });
 
+
+//router.post(/new ) -----------> anadir habitacion -> wpf
+
+//router.post(/reserva ) -----------> anadir habitacion -> wpf y android
+
+
 module.exports = router;

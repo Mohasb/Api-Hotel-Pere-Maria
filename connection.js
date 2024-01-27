@@ -1,16 +1,30 @@
 const mongoose = require("mongoose");
 const DatabaseUrl = process.env.DATABASE_URL;
 
-mongoose.connect(DatabaseUrl);
-const database = mongoose.connection;
+const rojo = "\x1b[31m";
+const reset = "\x1b[0m";
+const verde = "\x1b[32m";
 
-database.on("error", (e) => {
-  console.log(e);
-  console.log("Error connecting Database");
-});
-database.on("connected", () => {
-  console.log("Database Connected");
-});
-database.on('timeout', function(e) {
-  console.log("db: mongodb timeout "+ e);
-});
+try {
+  mongoose.connect(DatabaseUrl);
+  const database = mongoose.connection;
+
+  database.on("error", (error) => {
+    console.error(
+      rojo + "Error conectando a la base de datos:",
+      error.code + reset
+    );
+    if (error.message && error.message.includes("timeout")) {
+      console.log(
+        rojo + "Error timeout en la conexon a la base de datos:",
+        error.code + reset
+      );
+    }
+  });
+
+  database.on("connected", () => {
+    console.log(verde + "Conectado a la base de datos correctamente" + reset);
+  });
+} catch (error) {
+  console.error(rojo + "Error during database connection:" + reset, error);
+}

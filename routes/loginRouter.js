@@ -1,44 +1,51 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
-const loginUser = (req, res, next) => {
-  //hash del password
-  ///Obtener objeto post user y poer pass hasheado
-  // hash contraseña
-  //const salt = await bcrypt.genSalt(10);
-  //const password = await bcrypt.hash(req.body.password, salt);
+const userSchema = require("../models/userSchema");
 
+const loginUser = async (req, res, next) => {
+  const { user_name, password } = req.body;
 
-  // Comprobar si existe el user!!!!!!!!!!!!
-  // si existe----->
-  const user = {
-    user_name: req.body.user_name,
-    pass: req.body.pass, //aqui!!!!!!!
-    role: req.body.role,
-  };
+  try {
+    // Verificar si el usuario existe en la base de datos
+    const user = await userSchema.findOne({ user_name });
 
-  const secretKey = process.env.TOKEN_SECRET;
-  const payload = {
-    name: user.user_name,
-    pass: user.pass,
-    role: user.role,
-  };
+    if (!user) {
+      return res.status(401).json({ error: "Usuario no encontrado" });
+    }
 
-  const options = {
-    expiresIn: "1h", // El token expirará en 1 hora
-  };
+    console.log(user.password);
+    console.log(password);
+    console.log('Longitud de la contraseña proporcionada:', password.length);
+console.log('Longitud del hash almacenado:', user.password.length);
 
-  const token = jwt.sign(payload, secretKey, options);
-  req.token = token;
+    // Verificar la contraseña utilizando bcrypt
+    const isPasswordValid = await bcrypt.compare(password.trim(), user.password.trim());
+    console.log('Hash almacenado:', user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Contraseña incorrecta" });
+    }
 
-  // Añadir a cabecera de respuesta
-  /*  res.header("auth-token", token).json({
-    error: null,
-    data: { token },
-  });  */
-  //se guarda en token en el cliente de la cabecera de la respuesta(token)
-  next();
+    const secretKey = process.env.TOKEN_SECRET;
+    const payload = {
+      name: req.body.user_name,
+      pass: password,
+      role: req.body.role,
+    };
+
+    const options = {
+      expiresIn: "1h", // El token expirará en 1 hora
+    };
+
+    const token = jwt.sign(payload, secretKey, options);
+    req.token = token;
+
+    // Se guarda el token en la cabecera de la respuesta (token)
+    next();
+  } catch (error) {
+    console.error("Error durante el inicio de sesión:", error);
+    res.status(500).json({ error: "Error durante el inicio de sesión" });
+  }
 };
 
-
 module.exports = loginUser;
-
