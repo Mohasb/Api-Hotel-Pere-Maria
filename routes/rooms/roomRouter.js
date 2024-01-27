@@ -2,6 +2,71 @@ const express = require("express");
 const router = express.Router();
 const rommSchema = require("../../models/roomSchema");
 
+const baseURL = "https:localhost/assets/";
+
+/**
+ * @swagger
+ * tags:
+ *   name: Habitaciones
+ *   description: Endpoints relacionados con la gestión de Habitaciones
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Room:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         room_number:
+ *           type: integer
+ *         type:
+ *           type: string
+ *         description:
+ *           type: string
+ *         images:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               image1:
+ *                 type: string
+ *               image2:
+ *                 type: string
+ *               image3:
+ *                 type: string
+ *         price_per_night:
+ *           type: number
+ *         rate:
+ *           type: number
+ *         max_occupancy:
+ *           type: integer
+ *         isAvailable:
+ *           type: boolean
+ */
+
+/**
+ * @swagger
+ * /api/rooms/:
+ *   get:
+ *     summary: Obtiene todas las habitaciones
+ *     description: Endpoint para obtener todas las habitaciones.
+ *     tags: [Habitaciones]
+ *     responses:
+ *       200:
+ *         description: Devuelve todas las habitaciones con sus detalles.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Room'
+ *       500:
+ *         description: Error del servidor
+ */
+
 router.get("/", async (req, res) => {
   try {
     const rooms = await rommSchema.find();
@@ -11,6 +76,26 @@ router.get("/", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+/**
+ * @swagger
+ * /api/rooms/unique-rooms:
+ *   get:
+ *     summary: Obtiene habitaciones únicas
+ *     description: Endpoint para obtener las habitaciones únicas ordenadas por precio por noche.
+ *     tags: [Habitaciones]
+ *     responses:
+ *       200:
+ *         description: Devuelve las habitaciones únicas con sus detalles.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Room'
+ *       500:
+ *         description: Error del servidor
+ */
 
 router.get("/unique-rooms", async (req, res) => {
   try {
@@ -35,6 +120,30 @@ router.get("/unique-rooms", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * api/rooms/{type}:
+ *   get:
+ *     summary: Obtiene detalles de una habitación por tipo
+ *     description: Endpoint para obtener los detalles de una habitación específica por tipo.
+ *     tags: [Habitaciones]
+ *     parameters:
+ *       - in: path
+ *         name: type
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Tipo de la habitación a buscar
+ *     responses:
+ *       200:
+ *         description: Devuelve los detalles de la habitación especificada por tipo.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Room'
+ *       500:
+ *         description: Error del servidor
+ */
 router.get("/:type", async (req, res) => {
   const { type } = req.params;
 

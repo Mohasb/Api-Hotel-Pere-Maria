@@ -2,23 +2,54 @@ const express = require("express");
 const router = express.Router();
 const userSchema = require("../../models/userSchema");
 const loginUser = require("../login/loginRouter");
-const verifyToken = require("../middlewares/auth/AuthJwtMW");
-const authorize = require("../middlewares/auth/AutorizationMW");
 const schemaRegister = require("../../validations/registerSchema");
-const { rojo, verde, print } = require("../../helpers/colors");
 const bcrypt = require("bcrypt");
 const checkUserExistence = require("../middlewares/userExists");
+const { rojo, verde, print } = require("../../helpers/colors");
 
+////////////////////////////////////////////////      LOGIN      ////////////////////////////////////////////////
 router.use("/login", loginUser);
-
-///////////////////////////////////////////////////////////////////////////////////////////////
-// Obtener todos los usuarios
+////////////////////////////////////////////////      GET ALL USERS      ////////////////////////////////////////////////
 /**
  * @swagger
  * tags:
  *   name: Usuarios
  *   description: Endpoints relacionados con la gestión de usuarios
  */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: object
+ *           properties:
+ *             $oid:
+ *               type: string
+ *         user_name:
+ *           type: string
+ *         email:
+ *           type: string
+ *           format: email
+ *         password:
+ *           type: string
+ *         role:
+ *           type: string
+ *         reservations:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *       required:
+ *         - user_name
+ *         - email
+ *         - password
+ *         - role
+ */
+
 /**
  * @swagger
  * /api/users:
@@ -49,6 +80,7 @@ router.use("/login", loginUser);
  *             example:
  *               error: "Error al obtener la lista de usuarios."
  */
+// Obtener todos los usuarios
 router.get(
   "/",
   /*verifyToken, authorize("superAdmin"),*/ async (req, res) => {
@@ -61,7 +93,7 @@ router.get(
   }
 );
 
-// Obtener un usuario
+////////////////////////////////////////////////      GET ONE USER     ////////////////////////////////////////////////
 /**
  * @swagger
  * /api/users/{email}:
@@ -99,6 +131,7 @@ router.get(
  *             example:
  *               message: "Error al obtener la información del usuario."
  */
+// Obtener un usuario
 router.get("/:email", async (req, res) => {
   const { email } = req.params;
   console.log(email);
@@ -118,7 +151,7 @@ router.get("/:email", async (req, res) => {
   }
 });
 
-// Añadir usuario
+////////////////////////////////////////////////      POST NEW USER     ////////////////////////////////////////////////
 /**
  * @swagger
  * /api/users:
@@ -231,11 +264,6 @@ router.post("/", checkUserExistence, async (req, res) => {
     return res.status(400).json({ error: error.details[0].message });
   }
 
-  //const isEmailExist = await userSchema.findOne({ email: req.body.email });
-  //if (isEmailExist) {
-  //  return res.status(400).json({ error: "Email ya registrado" });
-  //}
-
   // Hash de la contraseña
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
@@ -260,6 +288,7 @@ router.post("/", checkUserExistence, async (req, res) => {
   }
 });
 
+////////////////////////////////////////////////      PUT EXISTENT USER     ////////////////////////////////////////////////
 //modificar un usuario
 /**
  * @swagger
@@ -344,7 +373,7 @@ router.patch("/update/:email", checkUserExistence, async (req, res) => {
   try {
     const email = req.params.email;
 
-    // Solo actualizamos los campos que se envían en el cuerpo de la solicitud
+    // Solo actualiza los campos que se envían en el cuerpo de la solicitud
     const updateFields = {
       user_name: req.body.user_name,
       email: req.body.email,
@@ -352,17 +381,18 @@ router.patch("/update/:email", checkUserExistence, async (req, res) => {
       reservations: req.body.reservations,
     };
 
-    // Si se proporciona un nuevo password, lo hasheamos
+    // Si se proporciona un nuevo password, se hashea
     if (req.body.password) {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       updateFields.password = hashedPassword;
     }
 
-     // Eliminamos campos undefined del objeto para que no se sobrescriban con valores undefined
-     Object.keys(updateFields).forEach(key => updateFields[key] === undefined && delete updateFields[key]);
+    // Eliminamos campos undefined del objeto para que no se sobrescriban con valores undefined
+    Object.keys(updateFields).forEach(
+      (key) => updateFields[key] === undefined && delete updateFields[key]
+    );
 
-     console.log(updateFields);
-     const resultado = await userSchema.updateOne(
+    const resultado = await userSchema.updateOne(
       { email },
       { $set: updateFields }
     );

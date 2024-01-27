@@ -13,6 +13,26 @@ const { rojo, verde, reset, print } = require("../../helpers/colors");
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Login:
+ *       type: object
+ *       properties:
+ *         user_name:
+ *           type: string
+ *         email:
+ *           type: string
+ *           format: email
+ *         password:
+ *           type: string
+ *       required:
+ *         - user_name
+ *         - email
+ *         - password
+ */
+
+/**
+ * @swagger
  * /api/users/login:
  *   post:
  *     summary: Iniciar sesión de usuario
