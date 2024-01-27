@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const rommSchema = require("../../models/roomSchema");
 
-const baseURL = "https:localhost/assets/";
+const baseURL = "https://localhost/api/assets/roomImages/";
 
 /**
  * @swagger
@@ -114,7 +114,23 @@ router.get("/unique-rooms", async (req, res) => {
       },
     ]);
 
-    res.status(200).json(uniqueRooms);
+    const uniqueRoomsWithImageURLs = uniqueRooms.map((room) => {
+      console.log("Original room:", room);
+
+      const roomCopy = {
+        ...room,
+        //_id: room._id.toString(),
+        images: room.images.map((image) => ({
+          ...image,
+          url: `${baseURL}${Object.values(image)[0]}.jpg`,
+        })),
+      };
+      return roomCopy;
+    });
+
+    console.dir(uniqueRoomsWithImageURLs, { depth: null });
+
+    res.status(200).json(uniqueRoomsWithImageURLs);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -122,7 +138,7 @@ router.get("/unique-rooms", async (req, res) => {
 
 /**
  * @swagger
- * api/rooms/{type}:
+ * /api/rooms/{type}:
  *   get:
  *     summary: Obtiene detalles de una habitación por tipo
  *     description: Endpoint para obtener los detalles de una habitación específica por tipo.
