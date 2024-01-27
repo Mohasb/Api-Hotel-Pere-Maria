@@ -10,10 +10,10 @@ const options = {
     },
   },
   apis: [
-    "./routes/users/userRouter.js",
-    "./routes/rooms/roomRouter.js",
-    "./routes/login/loginRouter.js",
-  ], 
+    "server/routes/users/userRouter.js",
+    "server/routes/rooms/roomRouter.js",
+    "server/routes/login/loginRouter.js",
+  ],
 };
 
 const swaggerSpec = swaggerJsdoc(options);

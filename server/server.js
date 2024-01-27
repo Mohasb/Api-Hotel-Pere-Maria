@@ -31,8 +31,8 @@ app.use("/api/rooms", roomRouter);
 /*--------------------------------------------------------------*/
 
 // Cargar los archivos del certificado y la clave privada https
-const privateKey = fs.readFileSync("./security/host.key", "utf8");
-const certificate = fs.readFileSync("./security/host.crt", "utf8");
+const privateKey = fs.readFileSync("./server/security/host.key", "utf8");
+const certificate = fs.readFileSync("./server/security/host.crt", "utf8");
 const credentials = { key: privateKey, cert: certificate };
 
 // Crear un servidor HTTPS utilizando Express
