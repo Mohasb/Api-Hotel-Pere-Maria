@@ -12,7 +12,7 @@ const loginUserController = async (req, res, next) => {
 
   try {
     const { error } = schemaLogin.validate(req.body);
-    console.log(error);
+
     if (error) return res.status(400).json({ error: error.details[0].message });
 
     // Verificar si el usuario existe en la base de datos

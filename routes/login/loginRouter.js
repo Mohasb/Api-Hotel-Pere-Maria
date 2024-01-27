@@ -3,13 +3,21 @@ const router = express.Router();
 const loginUserController = require("./loginController");
 const { rojo, verde, reset, print } = require("../../helpers/colors");
 
-// Login usuario
+
+/**
+ * @swagger
+ * tags:
+ *   name: Custom
+ *   description: Endpoints para acciones personalizadas
+ */
+
 /**
  * @swagger
  * /api/users/login:
  *   post:
  *     summary: Iniciar sesión de usuario
  *     description: Inicia sesión de un usuario y devuelve un token de acceso.
+ *     tags: [Custom]
  *     requestBody:
  *       required: true
  *       content:

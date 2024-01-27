@@ -11,6 +11,42 @@ router.use("/login", loginUser);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // Obtener todos los usuarios
+/**
+ * @swagger
+ * tags:
+ *   name: Usuarios
+ *   description: Endpoints relacionados con la gestión de usuarios
+ */
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Obtener todos los usuarios
+ *     description: Obtiene la lista de todos los usuarios registrados.
+ *     tags: [Usuarios]
+ *     responses:
+ *       '200':
+ *         description: Lista de usuarios obtenida correctamente.
+ *         content:
+ *           application/json:
+ *             example:
+ *               - _id: "60f85c8477742b001db54c4d"
+ *                 user_name: "Usuario1"
+ *                 email: "usuario1@gmail.com"
+ *                 role: "user"
+ *                 reservations: []
+ *               - _id: "60f85c8477742b001db54c4e"
+ *                 user_name: "Usuario2"
+ *                 email: "usuario2@gmail.com"
+ *                 role: "admin"
+ *                 reservations: []
+ *       '500':
+ *         description: Error al obtener la lista de usuarios.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "Error al obtener la lista de usuarios."
+ */
 router.get(
   "/",
   /*verifyToken, authorize("superAdmin"),*/ async (req, res) => {

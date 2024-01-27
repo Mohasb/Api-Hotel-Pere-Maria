@@ -18,7 +18,7 @@ const userRouter = require("./routes/users/userRouter");
 const roomRouter = require("./routes/rooms/roomRouter");
 const redirectToHTTPS = require("./security/securityMW");
 
-const { swaggerSpec, swaggerUi } = require("./swagger");
+const { swaggerSpec, swaggerUi } = require("./helpers/swagger");
 /*------------------------------MIDDLEWARES--------------------------*/
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(bodyParser.json());
@@ -28,9 +28,6 @@ app.use(redirectToHTTPS);
 app.use("/api/users", userRouter);
 app.use("/api/rooms", roomRouter);
 
-/*app.use("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});*/
 /*--------------------------------------------------------------*/
 
 // Cargar los archivos del certificado y la clave privada https
