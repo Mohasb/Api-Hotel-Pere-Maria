@@ -4,7 +4,7 @@ const rommSchema = require("../models/roomSchema");
 
 router.get("/", async (req, res) => {
   try {
-    const rooms = await rommSchema.find()
+    const rooms = await rommSchema.find();
 
     res.status(200).json(rooms);
   } catch (error) {
@@ -36,7 +36,6 @@ router.get("/unique-rooms", async (req, res) => {
 });
 
 router.get("/:type", async (req, res) => {
-  
   const { type } = req.params;
 
   try {
@@ -47,10 +46,6 @@ router.get("/:type", async (req, res) => {
   }
 });
 
-
 //router.post(/new ) -----------> anadir habitacion -> wpf
-
-//router.post(/reserva ) -----------> anadir habitacion -> wpf y android
-
 
 module.exports = router;
