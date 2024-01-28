@@ -37,7 +37,7 @@ const loginUserController = async (req, res, next) => {
     };
 
     const options = {
-      expiresIn: "8h", // El token expirará en 8 horas
+      expiresIn: process.env.TOKEN_EXPIRES || "8h",
     };
 
     const token = jwt.sign(payload, secretKey, options);
@@ -49,4 +49,4 @@ const loginUserController = async (req, res, next) => {
   }
 };
 
-module.exports = loginUserController
+module.exports = loginUserController;
