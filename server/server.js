@@ -19,8 +19,10 @@ const roomRouter = require("./routes/rooms/roomRouter");
 const redirectToHTTPS = require("./security/securityMW");
 const { swaggerSpec, swaggerUi } = require("./helpers/swagger");
 const { rojo, verde, print } = require("./helpers/colors");
+const cors = require('cors');
 
 /*------------------------------MIDDLEWARES--------------------------*/
+app.use(cors(corsOptions));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -38,6 +40,13 @@ const credentials = { key: privateKey, cert: certificate };
 
 // Crear un servidor HTTPS utilizando Express
 const httpsServer = https.createServer(credentials, app);
+
+// Cors
+var corsOptions = {
+  origin: '*', 
+  optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions));
 
 // Iniciar el servidor HTTPS
 httpsServer.listen(PORT, () => {
