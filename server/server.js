@@ -18,7 +18,7 @@ const userRouter = require("./routes/users/userRouter");
 const roomRouter = require("./routes/rooms/roomRouter");
 const redirectToHTTPS = require("./security/securityMW");
 const { swaggerSpec, swaggerUi } = require("./helpers/swagger");
-const { rojo, verde, print } = require("./helpers/colors");
+const { rojo, verde, log } = require("./helpers/colors");
 const cors = require('cors');
 
 /*------------------------------MIDDLEWARES--------------------------*/
@@ -33,6 +33,13 @@ app.use("/api/rooms", roomRouter);
 
 /*--------------------------------------------------------------*/
 
+// Cors
+var corsOptions = {
+  origin: '*', 
+  optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions));
+
 // Cargar los archivos del certificado y la clave privada https
 const privateKey = fs.readFileSync("./server/security/host.key", "utf8");
 const certificate = fs.readFileSync("./server/security/host.crt", "utf8");
@@ -41,16 +48,10 @@ const credentials = { key: privateKey, cert: certificate };
 // Crear un servidor HTTPS utilizando Express
 const httpsServer = https.createServer(credentials, app);
 
-// Cors
-var corsOptions = {
-  origin: '*', 
-  optionsSuccessStatus: 200
-}
-app.use(cors(corsOptions));
 
 // Iniciar el servidor HTTPS
 httpsServer.listen(PORT, () => {
-  print(
+  log(
     "Servidor HTTPS está escuchando en la ruta: " +
       verde +
       `https://localhost:${PORT}/api-docs`

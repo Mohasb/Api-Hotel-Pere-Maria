@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const loginUserController = require("./loginController");
-const { rojo, verde, reset, print } = require("../../helpers/colors");
+const { rojo, verde, reset, log } = require("../../helpers/colors");
 
 
 /**
@@ -85,8 +85,8 @@ router.post("/", loginUserController, (req, res) => {
   res.json({
     token: req.token,
   });
-  print(verde + "Usuario conectado correctamente.\nToken:");
-  print(req.token);
+  log(verde + "Usuario conectado correctamente.\nToken:");
+  log(req.token);
 });
 
 module.exports = router;

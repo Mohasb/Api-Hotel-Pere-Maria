@@ -3,8 +3,8 @@ const verde = "\x1b[32m";
 const amarillo = "\x1b[33m";
 const reset = "\x1b[0m";
 
-const print = (coloredMessaje) => {
+const log = (coloredMessaje) => {
   console.log(`${coloredMessaje}${reset}`);
 };
 
-module.exports = { rojo, verde, amarillo, print };
+module.exports = { rojo, verde, amarillo, log };

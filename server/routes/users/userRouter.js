@@ -5,7 +5,7 @@ const loginUser = require("../login/loginRouter");
 const schemaRegister = require("../../validations/registerSchema");
 const bcrypt = require("bcrypt");
 const checkUserExistence = require("../middlewares/userExists");
-const { rojo, verde, print } = require("../../helpers/colors");
+const { rojo, verde, log } = require("../../helpers/colors");
 
 ////////////////////////////////////////////////      LOGIN      ////////////////////////////////////////////////
 router.use("/login", loginUser);
@@ -280,7 +280,7 @@ router.post("/", checkUserExistence, async (req, res) => {
 
   try {
     const dataToSave = await data.save();
-    print(verde + "Nuevo usuario añadido:");
+    log(verde + "Nuevo usuario añadido:");
     console.log(dataToSave);
     res.status(200).json(dataToSave);
   } catch (error) {
