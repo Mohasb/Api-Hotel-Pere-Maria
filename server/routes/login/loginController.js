@@ -32,7 +32,6 @@ const loginUserController = async (req, res, next) => {
     const secretKey = process.env.TOKEN_SECRET;
     const payload = {
       email: req.body.email,
-      pass: password,
       role: user.role,
     };
 
