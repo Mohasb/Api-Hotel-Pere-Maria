@@ -13,6 +13,7 @@ const options = {
     "server/routes/users/userRouter.js",
     "server/routes/rooms/roomRouter.js",
     "server/routes/login/loginRouter.js",
+    "server/routes/reservations/reservationRouter.js",
   ],
 };
 
