@@ -6,7 +6,12 @@ const options = {
     openapi: "3.0.0",
     info: {
       title: "Hotel Pere Maria API",
-      version: "1.0.0",
+      version: "4.8.4",
+      description: "Developers: Maria, Chitan, Muhammad",
+      license: {
+        name: "MIT",
+        url: "https://spdx.org/licenses/MIT.html",
+      },
     },
   },
   apis: [

@@ -13,7 +13,7 @@ const rateSchema = require("../../models/rateSchema");
  * @swagger
  * components:
  *   schemas:
- *     Review:
+ *     Rates:
  *       type: object
  *       properties:
  *         user:
@@ -164,7 +164,8 @@ router.get("/:email", async (req, res) => {
   }
 });
 
-/**
+//Añadir 1 * abajo para incluir
+/*
  * @swagger
  * /api/rates/{email}:
  *   patch:
@@ -201,7 +202,7 @@ router.get("/:email", async (req, res) => {
  *       '500':
  *         description: Error del servidor
  */
-router.patch("/:email", async (req, res) => {
+/* router.patch("/:email", async (req, res) => {
   const { email } = req.params;
   const updatedReviewDetails = req.body;
 
@@ -222,11 +223,11 @@ router.patch("/:email", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+}); */
 
 /**
  * @swagger
- * /api/reviews/{email}:
+ * /api/rates/{email}:
  *   delete:
  *     summary: Elimina una reseña por email
  *     description: Elimina una reseña específica por el email asociado.
@@ -254,7 +255,9 @@ router.delete("/:email", async (req, res) => {
   const { email } = req.params;
 
   try {
-    const deletedReview = await rateSchema.findOneAndDelete({ "user.email": email });
+    const deletedReview = await rateSchema.findOneAndDelete({
+      "user.email": email,
+    });
 
     if (!deletedReview) {
       return res

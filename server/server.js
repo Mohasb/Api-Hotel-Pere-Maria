@@ -17,6 +17,8 @@ const app = express();
 const userRouter = require("./routes/users/userRouter");
 const roomRouter = require("./routes/rooms/roomRouter");
 const reservationRouter = require("./routes/reservations/reservationRouter");
+const rateRouter = require("./routes/rates/ratesRouter");
+
 const redirectToHTTPS = require("./security/securityMW");
 const { swaggerSpec, swaggerUi } = require("./helpers/swagger");
 const { rojo, verde, log } = require("./helpers/colors");
@@ -32,6 +34,7 @@ app.use("/api/assets", express.static("server/assets"));
 app.use("/api/users", userRouter);
 app.use("/api/rooms", roomRouter);
 app.use("/api/reservations", reservationRouter);
+app.use("/api/rates", rateRouter);
 
 /*--------------------------------------------------------------*/
 
