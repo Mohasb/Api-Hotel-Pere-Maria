@@ -134,7 +134,6 @@ router.get(
 // Obtener un usuario
 router.get("/:email", async (req, res) => {
   const { email } = req.params;
-  console.log(email);
 
   try {
     const user = await userSchema.findOne({ email });
@@ -281,7 +280,6 @@ router.post("/", checkUserExistence, async (req, res) => {
   try {
     const dataToSave = await data.save();
     log(verde + "Nuevo usuario añadido:");
-    console.log(dataToSave);
     res.status(200).json(dataToSave);
   } catch (error) {
     res.status(400).json({ message: error.message + "en MongoDb" });
@@ -292,7 +290,7 @@ router.post("/", checkUserExistence, async (req, res) => {
 //modificar un usuario
 /**
  * @swagger
- * /api/users/update/{email}:
+ * /api/users/{email}:
  *   patch:
  *     summary: Actualizar usuario
  *     description: Actualiza la información de un usuario existente en la base de datos.
@@ -369,7 +367,7 @@ router.post("/", checkUserExistence, async (req, res) => {
  *               message: Mensaje de error
  */
 //modificar usuario
-router.patch("/update/:email", checkUserExistence, async (req, res) => {
+router.patch("/:email", checkUserExistence, async (req, res) => {
   try {
     const email = req.params.email;
 
@@ -404,6 +402,55 @@ router.patch("/update/:email", checkUserExistence, async (req, res) => {
     res.status(200).json({ message: "Documento actualizado exitosamente" });
   } catch (error) {
     res.status(400).json({ error, message: error.message });
+  }
+});
+
+
+
+/**
+ * @swagger
+ * /api/users/{email}:
+ *   delete:
+ *     summary: Eliminar un usuario por email
+ *     description: Elimina un usuario específico mediante su dirección de correo electrónico.
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         description: Dirección de correo electrónico del usuario a eliminar.
+ *         example: mh@gmail.com
+ *     responses:
+ *       '204':
+ *         description: Usuario eliminado correctamente.
+ *       '404':
+ *         description: Usuario no encontrado.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Usuario 'mh@gmail.com' no encontrado"
+ *       '500':
+ *         description: Error al eliminar al usuario.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Error al eliminar al usuario."
+ */
+router.delete("/:email", async (req, res) => {
+  const { email } = req.params;
+
+  try {
+    const deletedUser = await userSchema.findOneAndDelete({ email });
+
+    if (!deletedUser) {
+      return res
+        .status(404)
+        .json({ message: `Usuario '${email}' no encontrado` });
+    }
+
+    res.status(204).send({ message: `Usuario '${email}' eliminado correctamente` });
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar al usuario." });
   }
 });
 

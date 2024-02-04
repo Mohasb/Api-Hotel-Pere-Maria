@@ -116,8 +116,6 @@ router.get("/unique-rooms", async (req, res) => {
     ]);
 
     const uniqueRoomsWithImageURLs = uniqueRooms.map((room) => {
-      //console.log("Original room:", room);
-
       const roomCopy = {
         ...room,
         //_id: room._id.toString(),
@@ -181,6 +179,171 @@ router.get("/:type", async (req, res) => {
     };
 
     res.status(200).json(roomWithImageURLs);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/rooms/:
+ *   post:
+ *     summary: Agregar una nueva habitación
+ *     description: Agrega una nueva habitación al sistema.
+ *     tags: [Habitaciones]
+ *     requestBody:
+ *       description: Detalles de la nueva habitación
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Room'
+ *     responses:
+ *       '201':
+ *         description: Habitación agregada correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Room'
+ *       '400':
+ *         description: Solicitud incorrecta.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Datos de la habitación incompletos o incorrectos"
+ *       '500':
+ *         description: Error del servidor
+ */
+router.post("/", async (req, res) => {
+  const roomDetails = req.body;
+
+  try {
+    const newRoom = await rommSchema.create(roomDetails);
+
+    const roomWithImageURLs = {
+      ...newRoom._doc,
+      images: newRoom.images.map((image) => ({
+        ...image._doc,
+        url: `${baseURL}${image.image}.jpg`,
+      })),
+    };
+
+    res.status(201).json(roomWithImageURLs);
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      return res
+        .status(400)
+        .json({ message: "Datos de la habitación incompletos o incorrectos" });
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/rooms/{type}:
+ *   patch:
+ *     summary: Actualizar detalles de una habitación por tipo
+ *     description: Actualiza los detalles de una habitación específica por tipo.
+ *     tags: [Habitaciones]
+ *     parameters:
+ *       - in: path
+ *         name: type
+ *         required: true
+ *         schema:
+ *           type: string
+ *           default: "Individual"
+ *         description: Tipo de la habitación a actualizar
+ *     requestBody:
+ *       description: Nuevos detalles de la habitación
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Room'
+ *     responses:
+ *       '200':
+ *         description: Detalles de la habitación actualizados correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Room'
+ *       '404':
+ *         description: Habitación no encontrada.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Room not found"
+ *       '500':
+ *         description: Error del servidor
+ */
+router.patch("/:type", async (req, res) => {
+  const { type } = req.params;
+  const updatedRoomDetails = req.body;
+
+  try {
+    const updatedRoom = await rommSchema.findOneAndUpdate(
+      { type },
+      updatedRoomDetails,
+      { new: true }
+    );
+
+    if (!updatedRoom) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+
+    const roomWithImageURLs = {
+      ...updatedRoom._doc,
+      images: updatedRoom.images.map((image) => ({
+        ...image._doc,
+        url: `${baseURL}${image.image}.jpg`,
+      })),
+    };
+
+    res.status(200).json(roomWithImageURLs);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/rooms/{type}:
+ *   delete:
+ *     summary: Eliminar una habitación por tipo
+ *     description: Elimina una habitación específica por tipo.
+ *     tags: [Habitaciones]
+ *     parameters:
+ *       - in: path
+ *         name: type
+ *         required: true
+ *         schema:
+ *           type: string
+ *           default: "Individual"
+ *         description: Tipo de la habitación a eliminar
+ *     responses:
+ *       '204':
+ *         description: Habitación eliminada correctamente.
+ *       '404':
+ *         description: Habitación no encontrada.
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Room not found"
+ *       '500':
+ *         description: Error del servidor
+ */
+router.delete("/:type", async (req, res) => {
+  const { type } = req.params;
+
+  try {
+    const deletedRoom = await rommSchema.findOneAndDelete({ type });
+
+    if (!deletedRoom) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+
+    res.status(204).send();
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
